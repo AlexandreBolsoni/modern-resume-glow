@@ -1,11 +1,10 @@
-
 import React from 'react';
 import { Calendar, MapPin, GraduationCap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const AboutSection = () => {
-  // Placeholder image URL - replace with an actual profile photo URL
-  const profileImageUrl = "https://placehold.co/400x400/3B82F6/FFFFFF?text=AB&font=poppins";
+  // Updated profile image URL to the uploaded image
+  const profileImageUrl = "/lovable-uploads/f7fb962d-97fa-49d1-8186-6a7bd70f62bc.png";
 
   const infoItems = [
     { 
