@@ -1,26 +1,47 @@
 
-import React from 'react';
-import { Linkedin, Github, Mail } from 'lucide-react';
+import React, { useState } from 'react';
+import { Linkedin, Github, Mail, Copy, Check } from 'lucide-react';
+import { Button } from './ui/button';
+import { toast } from "@/hooks/use-toast";
 
 const ContactSection = () => {
+  const [copied, setCopied] = useState(false);
+  const emailAddress = "bolsoni161@gmail.com";
+  
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText(emailAddress)
+      .then(() => {
+        setCopied(true);
+        toast({
+          title: "Email copiado!",
+          description: `${emailAddress} foi copiado para sua área de transferência.`
+        });
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch(err => {
+        console.error('Falha ao copiar email: ', err);
+        toast({
+          title: "Erro ao copiar",
+          description: "Não foi possível copiar o email. Por favor, tente novamente.",
+          variant: "destructive"
+        });
+      });
+  };
+
   const contactLinks = [
     {
       name: "LinkedIn",
       url: "https://www.linkedin.com/in/alexandre-hackbardt-bolsoni-155b03258/",
       icon: <Linkedin size={24} />,
-      className: "linkedin"
+      className: "linkedin",
+      isExternal: true
     },
     {
       name: "GitHub",
       url: "https://github.com/AlexandreBolsoni",
       icon: <Github size={24} />,
-      className: "github"
-    },
-    {
-      name: "E-mail",
-      url: "mailto:bolsoni161@gmail.com",
-      icon: <Mail size={24} />,
-      className: "email"
+      className: "github",
+      isExternal: true
     }
   ];
 
@@ -47,6 +68,23 @@ const ContactSection = () => {
                 <span>{link.name}</span>
               </a>
             ))}
+            
+            {/* Email Button with Copy Functionality */}
+            <Button 
+              onClick={handleCopyEmail}
+              className="contact-button email flex items-center justify-center gap-2"
+              variant="outline"
+            >
+              <Mail size={24} />
+              <span className="flex-grow">E-mail</span>
+              {copied ? <Check size={20} className="text-green-500" /> : <Copy size={20} />}
+            </Button>
+          </div>
+          
+          <div className="mt-6 text-center">
+            <p className="text-muted-foreground">
+              {emailAddress}
+            </p>
           </div>
         </div>
       </div>
