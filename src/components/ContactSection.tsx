@@ -70,15 +70,14 @@ const ContactSection = () => {
             ))}
             
             {/* Email Button with Copy Functionality */}
-            <Button 
+            <button 
               onClick={handleCopyEmail}
-              className="contact-button email flex items-center justify-center gap-2"
-              variant="outline"
+              className="contact-button email bg-accent text-white hover:bg-accent/80 flex items-center justify-center gap-2 py-3 px-6 rounded-lg font-medium transition-all duration-300 transform hover:-translate-y-1"
             >
               <Mail size={24} />
               <span className="flex-grow">E-mail</span>
-              {copied ? <Check size={20} className="text-green-500" /> : <Copy size={20} />}
-            </Button>
+              {copied ? <Check size={20} /> : <Copy size={20} />}
+            </button>
           </div>
           
           <div className="mt-6 text-center">
