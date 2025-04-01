@@ -18,7 +18,7 @@ const ContactSection = () => {
     },
     {
       name: "E-mail",
-      url: "mailto:alexandrehackbardtbolsoni@gmail.com",
+      url: "mailto:bolsoni161@gmail.com",
       icon: <Mail size={24} />,
       className: "email"
     }
