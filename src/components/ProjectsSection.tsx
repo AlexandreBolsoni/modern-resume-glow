@@ -11,6 +11,9 @@ interface Repository {
   homepage: string;
   topics: string[];
   language: string;
+  fork: boolean;
+  stargazers_count: number;
+  updated_at: string;
 }
 
 const ProjectsSection = () => {
@@ -28,9 +31,18 @@ const ProjectsSection = () => {
         }
         
         const data = await response.json();
-        // Sort repositories by some criteria, e.g., updated date
-        const sortedRepos = data.slice(0, 6); // Limit to 6 repositories
-        setRepositories(sortedRepos);
+        // Filter out forks and sort by updated date, stars, and size
+        const filteredRepos = data
+          .filter((repo: Repository) => !repo.fork && repo.description) // Remove forks and repos without description
+          .sort((a: Repository, b: Repository) => {
+            // Sort by stars first, then by updated date
+            const starsA = a.stargazers_count || 0;
+            const starsB = b.stargazers_count || 0;
+            if (starsB !== starsA) return starsB - starsA;
+            return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+          })
+          .slice(0, 6); // Limit to 6 repositories
+        setRepositories(filteredRepos);
         setLoading(false);
       } catch (err) {
         setError('Não foi possível carregar os projetos. Por favor, tente novamente mais tarde.');
@@ -70,7 +82,10 @@ const ProjectsSection = () => {
       html_url: "https://github.com/AlexandreBolsoni/portfolio-website",
       homepage: "",
       topics: ["react", "tailwind", "portfolio"],
-      language: "JavaScript"
+      language: "JavaScript",
+      fork: false,
+      stargazers_count: 0,
+      updated_at: "2024-01-01T00:00:00Z"
     },
     {
       id: 2,
@@ -79,7 +94,10 @@ const ProjectsSection = () => {
       html_url: "https://github.com/AlexandreBolsoni/flutter-todo-app",
       homepage: "",
       topics: ["flutter", "mobile", "todo-app"],
-      language: "Dart"
+      language: "Dart",
+      fork: false,
+      stargazers_count: 0,
+      updated_at: "2024-01-01T00:00:00Z"
     },
     {
       id: 3,
@@ -88,7 +106,10 @@ const ProjectsSection = () => {
       html_url: "https://github.com/AlexandreBolsoni/node-express-api",
       homepage: "",
       topics: ["nodejs", "express", "mongodb", "api"],
-      language: "JavaScript"
+      language: "JavaScript",
+      fork: false,
+      stargazers_count: 0,
+      updated_at: "2024-01-01T00:00:00Z"
     },
     {
       id: 4,
@@ -97,7 +118,10 @@ const ProjectsSection = () => {
       html_url: "https://github.com/AlexandreBolsoni/sql-database-project",
       homepage: "",
       topics: ["sql", "database", "optimization"],
-      language: "SQL"
+      language: "SQL",
+      fork: false,
+      stargazers_count: 0,
+      updated_at: "2024-01-01T00:00:00Z"
     }
   ];
 
