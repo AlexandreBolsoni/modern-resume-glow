@@ -31,17 +31,34 @@ const ProjectsSection = () => {
         }
         
         const data = await response.json();
-        // Filter out forks and sort by updated date, stars, and size
+        
+        // Filter and sort repositories
         const filteredRepos = data
-          .filter((repo: Repository) => !repo.fork && repo.description) // Remove forks and repos without description
-          .sort((a: Repository, b: Repository) => {
+          .filter((repo: any) => {
+            // Include non-fork repositories, and either has a description or has topics
+            return !repo.fork && (repo.description || (repo.topics && repo.topics.length > 0));
+          })
+          .sort((a: any, b: any) => {
             // Sort by stars first, then by updated date
             const starsA = a.stargazers_count || 0;
             const starsB = b.stargazers_count || 0;
             if (starsB !== starsA) return starsB - starsA;
             return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
           })
-          .slice(0, 6); // Limit to 6 repositories
+          .slice(0, 6) // Limit to 6 repositories
+          .map((repo: any) => ({
+            id: repo.id,
+            name: repo.name,
+            description: repo.description || `Projeto em ${repo.language || 'desenvolvimento'}`,
+            html_url: repo.html_url,
+            homepage: repo.homepage || '',
+            topics: repo.topics || [],
+            language: repo.language || 'Unknown',
+            fork: repo.fork,
+            stargazers_count: repo.stargazers_count,
+            updated_at: repo.updated_at
+          }));
+          
         setRepositories(filteredRepos);
         setLoading(false);
       } catch (err) {
