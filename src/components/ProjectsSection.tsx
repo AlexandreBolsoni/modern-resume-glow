@@ -31,34 +31,49 @@ const ProjectsSection = () => {
         }
         
         const data = await response.json();
+        console.log('GitHub repos fetched:', data.length);
+        
+        // Create descriptions for projects based on their names and languages
+        const getProjectDescription = (name: string, language: string) => {
+          const descriptions: Record<string, string> = {
+            'modern-resume-glow': 'Currículo moderno e responsivo com efeitos visuais em TypeScript',
+            'irrifes_app': 'Aplicativo móvel desenvolvido em Flutter para gestão de irrigação',
+            'trabalho-mobile': 'Projeto de desenvolvimento mobile usando Flutter e Dart',
+            'SYNCCLINIC': 'Sistema de gestão clínica desenvolvido em JavaScript',
+            'Trabalho-POII': 'Projeto de Programação Orientada a Objetos em TypeScript',
+            'biblioteca': 'Sistema de gestão de biblioteca desenvolvido em TypeScript',
+            'agenda-Contatos': 'Aplicação web para gerenciamento de contatos',
+            'TrabalhoFront-end2': 'Projeto de Front-end desenvolvido em JavaScript'
+          };
+          
+          return descriptions[name] || `Projeto desenvolvido em ${language || 'JavaScript'}`;
+        };
         
         // Filter and sort repositories
         const filteredRepos = data
           .filter((repo: any) => {
-            // Include non-fork repositories, and either has a description or has topics
-            return !repo.fork && (repo.description || (repo.topics && repo.topics.length > 0));
+            // Exclude forks and include main repositories
+            return !repo.fork;
           })
           .sort((a: any, b: any) => {
-            // Sort by stars first, then by updated date
-            const starsA = a.stargazers_count || 0;
-            const starsB = b.stargazers_count || 0;
-            if (starsB !== starsA) return starsB - starsA;
+            // Sort by updated date (most recent first)
             return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
           })
           .slice(0, 6) // Limit to 6 repositories
           .map((repo: any) => ({
             id: repo.id,
             name: repo.name,
-            description: repo.description || `Projeto em ${repo.language || 'desenvolvimento'}`,
+            description: repo.description || getProjectDescription(repo.name, repo.language),
             html_url: repo.html_url,
             homepage: repo.homepage || '',
             topics: repo.topics || [],
-            language: repo.language || 'Unknown',
+            language: repo.language || 'JavaScript',
             fork: repo.fork,
             stargazers_count: repo.stargazers_count,
             updated_at: repo.updated_at
           }));
           
+        console.log('Filtered repos:', filteredRepos);
         setRepositories(filteredRepos);
         setLoading(false);
       } catch (err) {
