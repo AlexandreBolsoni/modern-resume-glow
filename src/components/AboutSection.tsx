@@ -20,7 +20,7 @@ const AboutSection = () => {
     { 
       icon: <GraduationCap size={20} />, 
       label: "Formação", 
-      value: "Graduando em Tecnólogo em Sistemas para Internet no Instituto Federal do Espírito Santo" 
+      value: "Graduação em Sistemas para internet no Instituto Federal do Espirito Santo - campus Santa Teresa" 
     }
   ];
 
